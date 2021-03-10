@@ -1,0 +1,310 @@
+
+
+<html>  
+    <head>
+        
+       
+
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Page Title</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    </head>
+    <body>
+        <div class="container" mt-10>
+
+            <div class="card-header">
+            <h1>Productos</h1>
+        </div>
+
+        <hr>
+<form id="frm">
+ 
+   <div class="row">
+    
+      <div class="col-sm-6">
+           <input type="hidden"value=""name="Id" Id="Id">
+          <div class="form-group">         
+            <label>SKU:</label>
+             <br>
+             <input style="width:30%;" type="text"name="sku" id="sku">
+         </div>
+            
+           <label>FERT:</label>
+           <br>
+           <input style="width: 30%;" type="text"name="fert" id="fert">
+           <br>
+
+           <label>Modelo:</label>
+           <br>
+           <input style="width: 30%;" type="text"name="modelo" id="modelo">
+           <br>
+          
+           <label>Tipo:</label>
+           <br>
+           <input style="width:30%;" type="text"name="tipo" id="tipo">
+           <br>
+          
+           <label>NumeroDeSerie:</label>
+           <br>
+
+           <input style="width:30%;" type="text"name="numero_De_Serie" id="numero_De_Serie">
+           <br>
+           <label>FECHA:</label>
+           <br>
+
+           <input style="width:30%;" type="text"name="fecha" id="fecha">
+           <br>
+           <br>
+
+           <input style="width:30%;" type="button"value="Guardar" onclick="Guardar();">
+
+        </div>
+
+    
+  </div>
+   
+
+</form>
+
+
+
+
+
+<div class="card-header">
+<input type="text" id="formulario" style="width:20%;" placeholder="Buscar Producto" class="form-control my-2"> 
+<button class="btn btn-info mb-2"id="boton">Buscar</button>
+
+</div>
+        <hr>
+          <div id="divLista"class="table" >
+           
+           </div>
+        </div>
+        
+        
+    </body>
+
+
+    <br>
+
+   
+
+<script>
+
+    const formulario=document.querySelector('#formulario');
+    const boton=document.querySelector('#boton')
+
+
+
+const filtrar=()=>{
+    //console.log(formulario.value);
+    //resultado.innerHTML='';
+    const texto=formulario.value.tolowerCase();
+    const resultado =document.querySelector('#divLista')
+    
+    
+    for(let producto of Productos ){
+        let SKU=producto.sku.tolowerCase();
+        if(SKU.indexOf !== -1){
+        
+        }
+
+    }
+    if(resultado.innerHTML===''){
+    resultado.innerHTML +=' <li>producto no encontrado</li>'
+}
+}
+formulario.addEventListener('keyup',filtrar)
+filtrar();
+</script>
+<script>
+
+
+
+ 
+    var url = "https://localhost:44377/api/Producto";
+
+
+    Get();
+
+function Guardar()
+{
+    if(document.getElementById("Id").value!="")
+    { 
+        Edit();
+       
+    } 
+ else 
+    {
+     Post();
+
+    }  
+}
+
+function Post(){
+    fetch(url,{
+        method:"POST",
+        body:JSON.stringify({
+            sku:document.getElementById("sku").value,
+            fert:document.getElementById("fert").value,         
+            modelo:document.getElementById("modelo").value,
+            Tipo:document.getElementById("tipo").value,
+            numero_De_Serie :document.getElementById("numero_De_Serie").value,
+            fecha:document.getElementById("fecha").value
+            
+        }),
+        headers:{
+            'Accept':"application/json",
+            "Content-Type":"application/json"
+        }
+    }).then(function(response){
+        if(response.ok){
+        return response.text();
+
+    }else{
+        alert("Error al ejecutar solicitud");
+    }
+    }).then(function(Data){
+        console.log(Data);
+        Get();
+
+        document.getElementById("Id").value="";
+        document.getElementById("sku").value="";
+        document.getElementById("fert").value="";
+        document.getElementById("modelo").value="";
+        document.getElementById("tipo").value="";
+        document.getElementById("numero_De_Serie").value="";
+        document.getElementById("fecha").value="";
+    })
+} 
+function Delete(id){
+    fetch(url,{
+        method:"Delete",
+        body:JSON.stringify({
+            Id:id
+        }),
+        headers:{
+            'Accept':"application/json",
+            "Content-Type":"application/json"
+        }
+    }).then(function(response){
+        if(response.ok){
+        return response.text();
+
+    }else{
+        alert("Error al ejecutar solicitud");
+    }
+    }).then(function(Data){
+        console.log(Data);
+        Get();
+
+        
+    })
+}
+function OpenEdit(id,SKU,fert,modelo,Tipo,numero_De_Serie,fecha){
+document.getElementById("Id").value=id;
+document.getElementById("sku").value=SKU;
+document.getElementById("fert").value=fert;
+document.getElementById("modelo").value=modelo;
+document.getElementById("tipo").value=Tipo;
+document.getElementById("numero_De_Serie").value=numero_De_Serie;
+document.getElementById("fecha").value=fecha; 
+}
+function Edit(){
+    fetch(url,  {
+        method:"PUT",
+        body:JSON.stringify({
+                  
+            Id:document.getElementById("Id").value, 
+            SKU:document.getElementById("sku").value,
+            fert:document.getElementById("fert").value,
+            modelo:document.getElementById("modelo").value,
+            Tipo:document.getElementById("tipo").value,
+           numero_De_Serie:document.getElementById("numero_De_Serie").value,
+           fecha:document.getElementById("fecha").value,
+        }),
+        headers:{
+            'Accept':"application/json",
+            "Content-Type":"application/json"
+        }
+    }).then(function(response){
+        if(response.ok){
+        return response.text();
+
+    }else{
+        alert("Error al ejecutar solicitud");
+    }
+    }).then(function(Data){
+        console.log(Data);
+        Get();
+        document.getElementById("Id").value="";
+        document.getElementById("sku").value="";
+        document.getElementById("fert").value="";
+        document.getElementById("modelo").value="";
+        document.getElementById("tipo").value="";
+        document.getElementById("numero_De_Serie").value="";
+        document.getElementById("fecha").value="";
+    })
+}
+
+function Get(){
+    fetch (url).then(function (response) {
+        return response.json();
+    }).then(function (Data) {
+        document.getElementById("divLista").innerHTML="";
+
+        for(i=0;i<Data.length;i++){
+
+            let divElement=document.createElement("div");
+            let divSpan = document.createElement("span");  
+            let divButtonDelete=document.createElement("button");        
+            let divButtonEdit=document.createElement("button");        
+            divSpan.innerHTML=Data[i].sku+"   "+Data[i].fert+"   "+Data[i].modelo+"   "+Data[i].Tipo+"   "+Data[i].numero_De_Serie+"   "+Data[i].fecha;           
+            divButtonDelete.innerHTML="Eliminar";
+            divButtonDelete.MiId=Data[i].id;
+            divButtonDelete.addEventListener("click",function(mibutton){
+                Delete(mibutton.target.MiId);
+            })
+            divButtonEdit.innerHTML="Editar";
+            divButtonEdit.MiId=Data[i].id;
+            divButtonEdit.MiSKU=Data[i].sku;
+            divButtonEdit.MifERT=Data[i].fert;
+            divButtonEdit.MiModelo=Data[i].modelo;
+            divButtonEdit.MiTipo=Data[i].Tipo;
+            divButtonEdit.MiNumSerie=Data[i].numero_De_Serie;
+            divButtonEdit.MiFecha=Data[i].fecha;
+            divButtonEdit.addEventListener("click",function(mibutton){
+               
+
+                OpenEdit(
+                mibutton.target.MiId,
+                mibutton.target.MiSKU,
+                mibutton.target.MifERT,
+                mibutton.target.MiModelo,
+                mibutton.target.MiTipo,
+                mibutton.target.MiNumSerie,
+                mibutton.target.MiFecha
+
+            )
+             })            
+            divElement.appendChild(divSpan);
+            divElement.appendChild(divButtonDelete);
+            divElement.appendChild(divButtonEdit);
+             document.getElementById("divLista").appendChild(divElement);
+
+        }
+
+    })
+
+}
+
+
+
+
+
+    
+</script>
